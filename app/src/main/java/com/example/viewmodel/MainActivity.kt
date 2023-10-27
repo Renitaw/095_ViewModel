@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.viewmodel.DataSource.jenis
+import com.example.viewmodel.DataSource.status
 import com.example.viewmodel.ui.theme.ViewModelTheme
 
 class MainActivity : ComponentActivity() {
@@ -77,19 +78,19 @@ fun TampilLayout(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(20.dp))
         {
-            Image(painter = image,
-                contentDescription = null,
-                modifier = Modifier.size(15.dp),
-            )
-            Text(
-                text = "Register",
-                fontSize = 25.sp,
-                color = Color.Black
-            )
+            Row (horizontalArrangement = Arrangement.Start){
+                Image(painter = image,
+                    contentDescription = null,
+                )
+                Text(
+                    text = "Register",
+                    color = Color.Black,
+                )
+            }
             Text(
                 text = "Create Your Account",
                 fontSize = 30.sp,
-                color = Color.Black
+                color = Color.Black,
             )
             TampilForm()
         }
@@ -104,9 +105,8 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()) {
     var textNama by remember { mutableStateOf("") }
     var textTlp by remember { mutableStateOf("") }
     var textAlt by remember { mutableStateOf("") }
-    val status by remember { mutableStateOf("")
+    var textemail by remember { mutableStateOf("")
     }
-
     // Mengambil konteks lokal
     val context = LocalContext.current
     // Mendapatkan data dari ViewModel
@@ -137,18 +137,22 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()) {
         }
     )
     OutlinedTextField(
-        value = textAlt,
+        value = textemail,
         singleLine = true,
         shape = MaterialTheme.shapes.large,
         modifier = Modifier.fillMaxWidth(),
         label = { Text(text = "Email") },
         onValueChange = {
-            textAlt = it
+            textemail = it
         }
     )
     SelectJK(
         options = jenis.map { id -> context.resources.getString(id) },
         onSelectionChanged = { cobaViewModel.setjenisK(it) }
+    )
+    SelectBM(
+        options = status.map { id -> context.resources.getString(id) },
+        onSelectionChanged = { cobaViewModel.setBM(it) }
     )
     OutlinedTextField(
         value = textAlt,
@@ -164,7 +168,7 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()) {
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = {
-            cobaViewModel.insertData(textNama, textTlp, dataForm.sex, textAlt)
+            cobaViewModel.insertData(textemail, textNama, textTlp, dataForm.sex, textAlt, dataForm.status)
         }
     ) {
         Text(
@@ -172,20 +176,21 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()) {
             fontSize = 16.sp
         )
     }
-    Spacer(modifier = Modifier.height(100.dp))
 
     // Menampilkan hasil dari formulir
     TextHasil(
         jenisnya = cobaViewModel.jenisKL,
-        alamatnya = cobaViewModel.alamat,
+        teleponnya = cobaViewModel.noTelp,
         statusnya = cobaViewModel.status,
-        email = cobaViewModel.email
+        emailnya = cobaViewModel.email,
+        namanya = cobaViewModel.namaUsr,
+        alamatnya = cobaViewModel.alamat
     )
 }
 
 // Menampilkan hasil dari formulir dalam sebuah ElevatedCard
 @Composable
-fun TextHasil(jenisnya: String, alamatnya: String, statusnya: String, email: String) {
+fun TextHasil(namanya: String, jenisnya: String, alamatnya: String, statusnya: String, emailnya: String, teleponnya: String) {
     ElevatedCard (
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
@@ -209,7 +214,12 @@ fun TextHasil(jenisnya: String, alamatnya: String, statusnya: String, email: Str
                 .padding(horizontal = 10.dp, vertical = 4.dp)
         )
         Text(
-            text = "Email : " + email,
+            text = "Email : " + emailnya,
+            modifier = Modifier
+                .padding(horizontal = 10.dp, vertical = 4.dp)
+        )
+        Text(
+            text = "nama " + namanya,
             modifier = Modifier
                 .padding(horizontal = 10.dp, vertical = 4.dp)
         )
@@ -224,7 +234,7 @@ fun SelectJK (
 ){
     var selectedValue by rememberSaveable { mutableStateOf("")}
 
-    Column(modifier = Modifier.padding(10.dp)) {
+    Row(modifier = Modifier.padding(10.dp)) {
         options.forEach { item ->
             Row(
                 modifier = Modifier.selectable(
@@ -244,20 +254,31 @@ fun SelectJK (
                         onSelectionChanged(item)
                     }
                 )
-                RadioButton(
+                Text(item)
+            }
+        }
+    }
+}
+@Composable
+fun SelectBM (
+    options: List<String>,
+    onSelectionChanged: (String) -> Unit = {}
+){
+    var selectedValue by rememberSaveable { mutableStateOf("")}
+
+    Row(modifier = Modifier.padding(10.dp)) {
+        options.forEach { item ->
+            Row(
+                modifier = Modifier.selectable(
                     selected = selectedValue == item,
                     onClick = {
                         selectedValue = item
                         onSelectionChanged(item)
                     }
-                )
-                RadioButton(
-                    selected = selectedValue == item,
-                    onClick = {
-                        selectedValue = item
-                        onSelectionChanged(item)
-                    }
-                )
+                ),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
                 RadioButton(
                     selected = selectedValue == item,
                     onClick = {
