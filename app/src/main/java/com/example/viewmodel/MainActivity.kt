@@ -65,6 +65,8 @@ class MainActivity : ComponentActivity() {
 // Fungsi utama yang merupakan Activity utama.
 @Composable
 fun TampilLayout(modifier: Modifier = Modifier) {
+
+    val image = painterResource(id = R.drawable.panah)
     Card (
         modifier = Modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
@@ -80,7 +82,9 @@ fun TampilLayout(modifier: Modifier = Modifier) {
                 color = Color.Black
             )
             Image(painter = image,
-                contentDescription = )
+                contentDescription = null,
+                modifier = Modifier.size(15.dp)
+            )
             Text(
                 text = "Create Your Account",
                 fontSize = 30.sp,
