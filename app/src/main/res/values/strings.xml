@@ -2,5 +2,8 @@
     <string name="app_name">View Model</string>
     <string name="Laki">Laki-Laki</string>
     <string name="Perempuan">Perempuan</string>
+    <string name="BelumMenikah">Belum Menikah</string>
+    <string name="Menikah">Menikah</string>
     <string name="submit">Submit</string>
+
 </resources>

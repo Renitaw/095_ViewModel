@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
+// Fungsi utama yang merupakan Activity utama.
 @Composable
 fun TampilLayout(modifier: Modifier = Modifier) {
     Card (
@@ -68,8 +68,8 @@ fun TampilLayout(modifier: Modifier = Modifier) {
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(20.dp)
-        ) {
+            modifier = Modifier.padding(20.dp))
+        {
             TampilForm()
         }
 
@@ -79,16 +79,21 @@ fun TampilLayout(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TampilForm(cobaViewModel: CobaViewModel = viewModel()) {
-
+    // Variabel-variabel untuk menyimpan data formulir
     var textNama by remember { mutableStateOf("") }
     var textTlp by remember { mutableStateOf("") }
     var textAlt by remember { mutableStateOf("") }
+    val status by remember { mutableStateOf("")
+    }
 
+    // Mengambil konteks lokal
     val context = LocalContext.current
+    // Mendapatkan data dari ViewModel
     val dataForm: DataForm
     val uiState by cobaViewModel.uiState.collectAsState()
     dataForm = uiState;
 
+    // Formulir input dengan OutlinedTextField
     OutlinedTextField(
         value = textNama,
         singleLine = true,
@@ -115,14 +120,26 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()) {
         singleLine = true,
         shape = MaterialTheme.shapes.large,
         modifier = Modifier.fillMaxWidth(),
-        label = { Text(text = "Alamat") },
+        label = { Text(text = "Email") },
         onValueChange = {
             textAlt = it
         }
     )
     SelectJK(
         options = jenis.map { id -> context.resources.getString(id) },
-        onSelectionChanged = { cobaViewModel.setjenisK(it) })
+        onSelectionChanged = { cobaViewModel.setjenisK(it) }
+    )
+    OutlinedTextField(
+        value = textAlt,
+        singleLine = true,
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text(text = "Alamat") },
+        onValueChange = {
+            textAlt = it
+        }
+    )
+    // Tombol Submit
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = {
@@ -136,17 +153,18 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()) {
     }
     Spacer(modifier = Modifier.height(100.dp))
 
+    // Menampilkan hasil dari formulir
     TextHasil(
-        namanya = cobaViewModel.namaUsr,
-        teleponnya = cobaViewModel.noTelp,
         jenisnya = cobaViewModel.jenisKL,
-        alamatnya = cobaViewModel.alamat
-
+        alamatnya = cobaViewModel.alamat,
+        statusnya = cobaViewModel.status,
+        email = cobaViewModel.email
     )
 }
 
+// Menampilkan hasil dari formulir dalam sebuah ElevatedCard
 @Composable
-fun TextHasil(namanya: String, teleponnya: String, jenisnya: String, alamatnya: String) {
+fun TextHasil(jenisnya: String, alamatnya: String, statusnya: String, email: String) {
     ElevatedCard (
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
@@ -155,28 +173,29 @@ fun TextHasil(namanya: String, teleponnya: String, jenisnya: String, alamatnya: 
             .fillMaxWidth()
         ){
             Text(
-                text = "Nama : " + namanya,
+                text = "Jenis Kelamin : " + jenisnya,
                 modifier = Modifier
                     .padding(horizontal = 10.dp, vertical = 4.dp)
             )
         Text(
-            text = "Telepon : " + teleponnya,
+            text = "Alamat : " + alamatnya,
             modifier = Modifier
                 .padding(horizontal = 10.dp, vertical = 5.dp)
         )
         Text(
-            text = "Jenis Kelamin : " + jenisnya,
+            text = "Status : " + statusnya,
             modifier = Modifier
                 .padding(horizontal = 10.dp, vertical = 4.dp)
         )
         Text(
-            text = "Alamat : " + alamatnya,
+            text = "Email : " + email,
             modifier = Modifier
                 .padding(horizontal = 10.dp, vertical = 4.dp)
         )
     }
 }
 
+// Menampilkan pilihan jenis kelamin dengan RadioButton.
 @Composable
 fun SelectJK (
     options: List<String>,
@@ -194,7 +213,7 @@ fun SelectJK (
                         onSelectionChanged(item)
                     }
                 ),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ){
                 RadioButton(
                     selected = selectedValue == item,
