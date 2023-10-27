@@ -35,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -76,14 +77,14 @@ fun TampilLayout(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(20.dp))
         {
-            Text(
-                text = "Register",
-                fontSize = 30.sp,
-                color = Color.Black
-            )
             Image(painter = image,
                 contentDescription = null,
-                modifier = Modifier.size(15.dp)
+                modifier = Modifier.size(15.dp),
+            )
+            Text(
+                text = "Register",
+                fontSize = 25.sp,
+                color = Color.Black
             )
             Text(
                 text = "Create Your Account",
