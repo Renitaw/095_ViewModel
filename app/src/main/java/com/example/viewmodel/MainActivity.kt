@@ -77,12 +77,14 @@ fun TampilLayout(modifier: Modifier = Modifier) {
             Text(
                 text = "Register",
                 fontSize = 30.sp,
-                color = Color.White
+                color = Color.Black
             )
+            Image(painter = image,
+                contentDescription = )
             Text(
                 text = "Create Your Account",
                 fontSize = 30.sp,
-                color = Color.White
+                color = Color.Black
             )
             TampilForm()
         }
@@ -230,6 +232,20 @@ fun SelectJK (
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
+                RadioButton(
+                    selected = selectedValue == item,
+                    onClick = {
+                        selectedValue = item
+                        onSelectionChanged(item)
+                    }
+                )
+                RadioButton(
+                    selected = selectedValue == item,
+                    onClick = {
+                        selectedValue = item
+                        onSelectionChanged(item)
+                    }
+                )
                 RadioButton(
                     selected = selectedValue == item,
                     onClick = {
