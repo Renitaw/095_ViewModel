@@ -79,7 +79,11 @@ fun TampilLayout(modifier: Modifier = Modifier) {
                 fontSize = 30.sp,
                 color = Color.White
             )
-
+            Text(
+                text = "Create Your Account",
+                fontSize = 30.sp,
+                color = Color.White
+            )
             TampilForm()
         }
 
